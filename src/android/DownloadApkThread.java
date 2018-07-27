@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 import 	java.nio.charset.StandardCharsets;
@@ -67,7 +68,11 @@ public class DownloadApkThread implements Runnable {
             // 判断SD卡是否存在，并且是否具有读写权限
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 // 获得存储卡的路径
-                URL url = new URL(mHashMap.get("url"));
+                String str = URLEncoder.encode(mHashMap.get("url"),"UTF-8");
+                // 解决中文问题
+                str = str.replaceAll("%3A", ":").replaceAll("%2F", "/");
+//                URL url = new URL(mHashMap.get("url"));
+                URL url = new URL(str);
                 // 创建连接
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
